@@ -1,0 +1,25 @@
+{
+    "data": {
+        "data": {
+            "date": "2026-01-28T14:32:00Z",
+            "location": {
+                "lat": 45.7640,
+                "long": 4.8357
+            },
+            "measurements": {
+                "additionalProp1": {
+                    "unit": "°C",
+                    "value": 19.8
+                },
+                "additionalProp2": {
+                    "unit": "%",
+                    "value": 58
+                },
+                "additionalProp3": {
+                    "unit": "hPa",
+                    "value": 1012
+                }
+            }
+        }
+    }
+}
