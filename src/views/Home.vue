@@ -23,7 +23,7 @@
               <v-btn color="success" block :to="{ path: '/carte' }">Carte</v-btn>
             </v-col>
             <v-col cols="12" sm="6" md="3">
-              <v-btn color="info" block :to="{ path: '/comparatif' }">Comparatif</v-btn>
+              <v-btn color="info" block :to="{ path: '/historique' }">Historique</v-btn>
             </v-col>
           </v-row>
         </v-card>

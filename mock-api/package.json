@@ -1,0 +1,24 @@
+{
+  "name": "meteo-mock-api",
+  "version": "1.0.0",
+  "description": "Mock API server for Meteo Station",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "json-server",
+    "mock",
+    "api",
+    "meteo"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "json-server": "^0.17.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

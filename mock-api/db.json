@@ -1,0 +1,31 @@
+{
+  "sondes": [
+    {
+      "id": 1,
+      "name": "Sonde Campus ENSG",
+      "location": {
+        "lat": 48.8413,
+        "long": 2.5877
+      },
+      "active": true,
+      "lastUpdate": "2026-02-04T14:30:00Z"
+    }
+  ],
+  "live_data": {
+    "date": "2026-02-04T14:32:00Z",
+    "location": {
+      "lat": 48.8413,
+      "long": 2.5877
+    },
+    "measurements": {
+      "temperature": { "unit": "°C", "value": 18.4 },
+      "humidity": { "unit": "%", "value": 65.2 },
+      "pressure": { "unit": "hPa", "value": 1013.5 },
+      "rain": { "unit": "mm", "value": 0.2 },
+      "luminosity": { "unit": "lux", "value": 45000 },
+      "windSpeed": { "unit": "km/h", "value": 12.3 },
+      "windDirection": { "unit": "°", "value": 245 }
+    }
+  },
+  "archive_data": []
+}
