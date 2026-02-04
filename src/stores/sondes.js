@@ -1,32 +1,29 @@
 import { defineStore } from 'pinia'
+import { fetchStationData } from '@/api/sondes'
 
-// Fonction générique pour fetcher une API
-async function fetchStationData(endpoint) {
-  try {
-    const res = await fetch(endpoint)
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    return await res.json()
-  } catch (err) {
-    console.error('Erreur fetch station', err)
-    return null
-  }
-}
+
 export const useSondesStore = defineStore('sondes', {
   state: () => ({
     sondes: [],
     locations: [],
     meteoData: [],
-    archiveData: [] // nouvelle propriété pour stocker l’archive
+    archiveData: []
   }),
   actions: {
-    async loadStations(endpoints, selectedMeasurements = ['temperature']) {
+    // Charger les stations live
+    async loadStations(selectedMeasurements = ['temperature']) {
+      // Construire les endpoints à partir des variables d'environnement
+      const endpoints = [
+        import.meta.env.VITE_METEO_ENDPOINT_1,
+        import.meta.env.VITE_METEO_ENDPOINT_2,
+        import.meta.env.VITE_METEO_ENDPOINT_3
+      ]
+
       const endpointsWithMeasures = endpoints.map(
-        ep => `${ep.split('?')[0]}?data=${selectedMeasurements.join(',')}`
+        ep => `${ep.replace(/\/$/, '')}/meteo/v1/live/?data=${selectedMeasurements.join(',')}`
       )
 
-      const results = await Promise.all(
-        endpointsWithMeasures.map(fetchStationData)
-      )
+      const results = await Promise.all(endpointsWithMeasures.map(fetchStationData))
 
       this.sondes = results.filter(r => r !== null)
       this.locations = this.sondes.map(s => s.data.location)
@@ -38,28 +35,38 @@ export const useSondesStore = defineStore('sondes', {
       }))
     },
 
-    // Nouvelle action pour fetcher les données d'archive
-async loadArchive(startTimestamp, endTimestamp) {
-  const url = `http://localhost:3000/meteo/v1/archive?start=${startTimestamp}&end=${endTimestamp}`
-  console.log(url)
-  const res = await fetchStationData(url)
-  console.log(res)
-  if (!res || !res.data) {
-    console.warn("Aucune donnée reçue pour l'archive")
-    this.archiveData = []
-    return
-  }
-  
+    // Charger les archives
+    async loadArchive(startTimestamp, endTimestamp) {
+      const endpoints = [
+        import.meta.env.VITE_METEO_ENDPOINT_1,
+        import.meta.env.VITE_METEO_ENDPOINT_2,
+        import.meta.env.VITE_METEO_ENDPOINT_3
+      ]
 
-  // Transforme chaque ligne de data en objet {colonne: valeur}
-  this.archiveData = res.data.map(row => {
-    const obj = {}
-    res.legend.forEach((key, index) => {
-      obj[key] = row[index]
-    })
-    return obj
-  })
-}
+      const results = await Promise.all(
+        endpoints.map(ep => {
+          const url = `${ep.replace(/\/$/, '')}/meteo/v1/archive?start=${startTimestamp}&end=${endTimestamp}`
+          return fetchStationData(url)
+        })
+      )
 
+      const validResults = results.filter(res => res && res.data)
+
+      if (validResults.length === 0) {
+        console.warn("Aucune donnée reçue pour l'archive")
+        this.archiveData = []
+        return
+      }
+
+      this.archiveData = validResults.flatMap(res =>
+        res.data.map(row => {
+          const obj = {}
+          res.legend.forEach((key, index) => {
+            obj[key] = row[index]
+          })
+          return obj
+        })
+      )
+    }
   }
 })

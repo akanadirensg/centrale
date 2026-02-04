@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import { useSondesStore } from '../stores/sondes'
-import { VRow, VCol, VTextField, VBtn, VDataTable } from 'vuetify/components'
 
 const sondesStore = useSondesStore()
 
@@ -10,48 +9,30 @@ const endDate = ref('')
 const columns = ref([])
 
 const fetchArchive = async () => {
-  if (!startDate.value || !endDate.value) return alert('Veuillez choisir les deux dates !')
+  if (!startDate.value || !endDate.value) {
+    alert('Veuillez choisir les deux dates !')
+    return
+  }
 
   const startTimestamp = Math.floor(new Date(startDate.value).getTime() / 1000)
   const endTimestamp = Math.floor(new Date(endDate.value).getTime() / 1000)
 
-  const res = await sondesStore.loadArchive("1700000000", "1700003600")
-  console.log(res)
 
-  // Vérifie si c'est un tableau ou un objet unique
-  let archiveArray = []
-  if (Array.isArray(sondesStore.archiveData)) {
-    // Plusieurs sondes
-    sondesStore.archiveData.forEach(sonde => {
-      archiveArray = archiveArray.concat(
-        sonde.data.map(row => {
-          const obj = {}
-          sonde.legend.forEach((key, idx) => (obj[key] = row[idx]))
-          return obj
-        })
-      )
-    })
-  } else if (sondesStore.archiveData.data) {
-    // Une seule sonde
-    archiveArray = sondesStore.archiveData.data.map(row => {
-      const obj = {}
-      sondesStore.archiveData.legend.forEach((key, idx) => (obj[key] = row[idx]))
-      return obj
-    })
-  }
 
-  // Met à jour archiveData avec le tableau plat
-  sondesStore.archiveData = archiveArray
+  await sondesStore.loadArchive( startTimestamp, endTimestamp)
 
-  // Génère les colonnes dynamiques à partir de la première ligne
-  if (archiveArray.length > 0) {
-    columns.value = Object.keys(archiveArray[0]).map(key => ({
+  // Génération dynamique des colonnes depuis le store
+  if (sondesStore.archiveData.length > 0) {
+    columns.value = Object.keys(sondesStore.archiveData[0]).map(key => ({
       title: key.toUpperCase(),
       key
     }))
+  } else {
+    columns.value = []
   }
 }
 </script>
+
 
 
 <template>
@@ -87,12 +68,13 @@ const fetchArchive = async () => {
     <v-row v-if="sondesStore.archiveData.length > 0">
       <v-col cols="12">
         <v-data-table
-          :items="sondesStore.archiveData"
-          :headers="columns"
-          class="elevation-1"
-          dense
-          :items-per-page="10"
-        />
+  :items="sondesStore.archiveData"
+  :headers="columns"
+  class="elevation-1"
+  dense
+  :items-per-page="10"
+/>
+
       </v-col>
     </v-row>
 

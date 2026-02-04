@@ -7,8 +7,3 @@ export async function fetchStationData(endpoint) {
     return null
   }
 }
-
-export async function fetchStationLocation(endpoint) {
-  const data = await fetchStationData(endpoint)
-  return data?.data?.location || null
-}

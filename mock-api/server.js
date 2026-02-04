@@ -147,37 +147,48 @@ server.get('/meteo/v1/archive', (req, res) => {
   const { start, end, sondeId } = req.query
 
   if (!start || !end) {
-    return res.status(400).json({ 
-      error_code: 400, 
-      error_message: "Missing required parameters: start and end" 
+    return res.status(400).json({
+      error_code: 400,
+      error_message: "Missing required parameters: start and end"
     })
   }
 
   const db = router.db
   const sondes = db.get('sondes').value()
 
-  // Fonction interne pour générer un objet au format API attendu
-  const formatArchive = (sonde) => {
-    return generateArchiveData(parseInt(start), parseInt(end), sonde.location)
-  }
+  let sonde
 
   if (sondeId) {
-    const sonde = sondes.find(s => s.id === parseInt(sondeId))
+    sonde = sondes.find(s => s.id === parseInt(sondeId))
     if (!sonde) {
-      return res.status(404).json({ error_code: 404, error_message: "Sonde not found" })
+      return res.status(404).json({
+        error_code: 404,
+        error_message: "Sonde not found"
+      })
     }
-    return res.json(formatArchive(sonde))
+  } else {
+    sonde = sondes[0]
+    if (!sonde) {
+      return res.status(404).json({
+        error_code: 404,
+        error_message: "No sondes available"
+      })
+    }
   }
 
-  // Sinon, retourner les archives pour toutes les sondes dans un tableau
-  const allArchive = sondes.map(sonde => ({
-    legend: formatArchive(sonde).legend,
-    unit: formatArchive(sonde).unit,
-    data: formatArchive(sonde).data
-  }))
+  const archive = generateArchiveData(
+    parseInt(start),
+    parseInt(end),
+    sonde.location
+  )
 
-  res.json(allArchive)
+  return res.json({
+    legend: archive.legend,
+    unit: archive.unit,
+    data: archive.data
+  })
 })
+
 
 
 // Route pour obtenir toutes les sondes

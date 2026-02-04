@@ -4,40 +4,34 @@ import { useSondesStore } from '../stores/sondes'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
-// store Pinia
 const sondesStore = useSondesStore()
 const mapContainer = ref(null)
 let map = null
 
-// endpoints des stations depuis .env
-const endpoints = [
-    import.meta.env.VITE_STATION_1,
-    import.meta.env.VITE_STATION_2,
-    import.meta.env.VITE_STATION_3
-]
 
 onMounted(async () => {
-    // charger locations
-    await sondesStore.loadLocationsOnly(endpoints)
+    // await sondesStore.loadLocationsOnly()
 
-    await nextTick()
+    // await nextTick()
 
-    // initialiser la map avec style Carto
+    // initialiser la map
     map = new maplibregl.Map({
         container: mapContainer.value,
-        style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json', // joli style
+        style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
         center: [2.3522, 48.8566],
         zoom: 5
     })
 
+    // forcer resize au cas où le container a changé
+    map.resize()
+
     // ajouter les marqueurs
     sondesStore.locations.forEach((loc, i) => {
-        new maplibregl.Marker({ color: '#FF5722' }) // orange stylé
+        new maplibregl.Marker({ color: '#FF5722' })
             .setLngLat([loc.long, loc.lat])
             .setPopup(
                 new maplibregl.Popup({ offset: 25 }).setHTML(
-                    `<strong>Station ${i + 1}</strong><br>
-           Lat: ${loc.lat}, Long: ${loc.long}`
+                    `<strong>Station ${i + 1}</strong><br>Lat: ${loc.lat}, Long: ${loc.long}`
                 )
             )
             .addTo(map)
@@ -52,8 +46,8 @@ onMounted(async () => {
                 <v-card class="pa-4" elevation="5">
                     <v-card-title class="text-h5 font-weight-bold">Positions des stations</v-card-title>
                     <v-card-text>
-                        <div ref="mapContainer"
-                            style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden;"></div>
+                        <!-- Ajout de la classe map-container -->
+                        <div ref="mapContainer" class="map-container"></div>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -78,6 +72,8 @@ onMounted(async () => {
 
 <style scoped>
 .map-container {
+    width: 100%;
+    height: 500px;
     border-radius: 12px;
     overflow: hidden;
 }

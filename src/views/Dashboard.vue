@@ -63,11 +63,7 @@ import SensorCard from './SensorCard.vue'
 
 const sondesStore = useSondesStore()
 
-const endpoints = [
-  'http://localhost:3000/meteo/v1/live',
-  'http://localhost:3000/meteo/v1/live',
-  'http://localhost:3000/meteo/v1/live',
-]
+
 
 const availableMeasurements = ref([
   { label: 'Température', key: 'temperature', checked: true },
@@ -88,28 +84,11 @@ const selectedMeasurements = computed(() =>
 // Recharge les données dès que la sélection change
 watch(selectedMeasurements, async (newMeasures) => {
   if (newMeasures.length > 0) {
-    await sondesStore.loadStations(endpoints, newMeasures)
+    await sondesStore.loadStations(newMeasures)
   }
 }, { immediate: true })
 </script>
 
 <style scoped>
-/* Style custom pour les checkboxes */
-.custom-checkbox {
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
 
-.custom-checkbox:hover {
-  transform: scale(1.05);
-}
-
-.custom-checkbox .v-label {
-  margin-left: 10px;
-  color: #1976D2; /* Couleur primaire plus visible */
-  font-size: 16px;
-}
 </style>

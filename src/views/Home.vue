@@ -1,7 +1,5 @@
 <script setup>
 </script>
-
-
 <template>
   <v-container class="home" fluid>
     <v-row justify="center" class="text-center my-12">
