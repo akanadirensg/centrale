@@ -19,12 +19,14 @@
     },
     "measurements": {
       "temperature": { "unit": "°C", "value": 18.4 },
-      "humidity": { "unit": "%", "value": 65.2 },
       "pressure": { "unit": "hPa", "value": 1013.5 },
-      "rain": { "unit": "mm", "value": 0.2 },
+      "humidity": { "unit": "%", "value": 65.2 },
       "luminosity": { "unit": "lux", "value": 45000 },
-      "windSpeed": { "unit": "km/h", "value": 12.3 },
-      "windDirection": { "unit": "°", "value": 245 }
+      "wind_heading": { "unit": "°", "value": 245 },
+      "wind_speed_avg": { "unit": "km/h", "value": 12.3 },
+      "wind_speed_max": { "unit": "km/h", "value": 15.0 },
+      "wind_speed_min": { "unit": "km/h", "value": 8.0 },
+      "rain": { "unit": "mm", "value": 0.2 }
     }
   },
   "archive_data": []

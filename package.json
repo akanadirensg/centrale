@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "@mdi/js": "^7.4.47",
     "axios": "^1.13.4",
     "chart.js": "^4.5.1",
     "maplibre-gl": "^5.17.0",
