@@ -14,8 +14,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-
-
 /* Scrollbar personnalisée */
 ::-webkit-scrollbar {
   width: 10px;
