@@ -12,11 +12,7 @@ export const useSondesStore = defineStore('sondes', {
     // Charger les stations live
     async loadStations(selectedMeasurements = ['temperature']) {
       const endpoints = [
-        import.meta.env.VITE_METEO_ENDPOINT_1,
-        import.meta.env.VITE_METEO_ENDPOINT_2,
-        import.meta.env.VITE_METEO_ENDPOINT_3,
-        import.meta.env.VITE_METEO_ENDPOINT_4,
-        import.meta.env.VITE_METEO_ENDPOINT_5,
+        import.meta.env.VITE_METEO_ENDPOINT,
       ]
 
       const endpointsWithMeasures = endpoints.map(
@@ -26,6 +22,8 @@ export const useSondesStore = defineStore('sondes', {
       const results = await Promise.all(
         endpointsWithMeasures.map(fetchStationData)
       )
+
+      console.log(results)
 
       // Filtrer les réponses avec erreur
       const validResults = results.filter(
@@ -53,7 +51,7 @@ export const useSondesStore = defineStore('sondes', {
     // Charger les archives
     async loadArchive(startTimestamp, endTimestamp) {
       const endpoints = [
-        import.meta.env.VITE_METEO_ENDPOINT_1,
+        import.meta.env.VITE_METEO_ENDPOINT,
       ]
 
       const results = await Promise.all(

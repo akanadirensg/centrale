@@ -55,18 +55,77 @@ function generateLiveData(sondeId, location) {
 }
 
 // Fonction pour générer des données d'archive
-function generateArchiveData(start, end, location) {
-  const legend = ["time", "lat", "long", "temperature", "humidity", "pressure", "rain", "luminosity", "windSpeed", "windDirection"]
-  const unit = ["ISO8601", "°", "°", "°C", "%", "hPa", "mm", "lux", "km/h", "°"]
-  const data = []
+// function generateArchiveData(start, end, location) {
+//   const legend = ["time", "lat", "long", "temperature", "humidity", "pressure", "rain", "luminosity", "windSpeed", "windDirection"]
+//   const unit = ["ISO8601", "°", "°", "°C", "%", "hPa", "mm", "lux", "km/h", "°"]
+//   const data = []
   
+//   const startTime = start * 1000
+//   const endTime = end * 1000
+//   const interval = 3600000 // 1 heure en millisecondes
+  
+//   for (let timestamp = startTime; timestamp <= endTime; timestamp += interval) {
+//     const date = new Date(timestamp).toISOString()
+    
+//     data.push([
+//       date,
+//       location.lat,
+//       location.long,
+//       parseFloat(generateRandomValue(18, 5).toFixed(1)),
+//       parseFloat(generateRandomValue(65, 15).toFixed(1)),
+//       parseFloat(generateRandomValue(1013, 10).toFixed(1)),
+//       parseFloat(generateRandomValue(0.2, 0.3).toFixed(1)),
+//       parseFloat(generateRandomValue(45000, 15000).toFixed(0)),
+//       parseFloat(generateRandomValue(12, 8).toFixed(1)),
+//       parseFloat(generateRandomValue(180, 180).toFixed(0))
+//     ])
+//   }
+  
+//   return {
+//     legend,
+//     unit,
+//     data
+//   }
+// }
+function generateArchiveData(start, end, location) {
+  const legend = [
+    "time",
+    "lat",
+    "long",
+    "temperature",
+    "humidity",
+    "pressure",
+    "rain",
+    "luminosity",
+    "windSpeed",
+    "windDirection"
+  ]
+
+  const unit = [
+    "ISO8601",
+    "°",
+    "°",
+    "°C",
+    "%",
+    "hPa",
+    "mm",
+    "lux",
+    "km/h",
+    "°"
+  ]
+
+  const data = []
+
   const startTime = start * 1000
   const endTime = end * 1000
-  const interval = 3600000 // 1 heure en millisecondes
-  
-  for (let timestamp = startTime; timestamp <= endTime; timestamp += interval) {
+
+  const POINTS = 25
+  const interval = (endTime - startTime) / (POINTS - 1)
+
+  for (let i = 0; i < POINTS; i++) {
+    const timestamp = startTime + i * interval
     const date = new Date(timestamp).toISOString()
-    
+
     data.push([
       date,
       location.lat,
@@ -80,13 +139,14 @@ function generateArchiveData(start, end, location) {
       parseFloat(generateRandomValue(180, 180).toFixed(0))
     ])
   }
-  
+
   return {
     legend,
     unit,
     data
   }
 }
+
 
 // Middleware pour ajouter les headers CORS
 server.use((req, res, next) => {

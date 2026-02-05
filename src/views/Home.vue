@@ -26,8 +26,8 @@
           <v-col cols="6" sm="3">
             <v-card class="stat-mini text-center pa-4" elevation="0">
               <v-icon size="40" color="primary" class="mb-2">mdi-server</v-icon>
-              <div class="text-h4 font-weight-bold">Nombre de stations  </div>
-              <div class="text-caption text-grey">Stations</div>
+              <div class="text-h4 font-weight-bold">1</div>
+              <div class="text-caption text-grey">Station</div>
             </v-card>
           </v-col>
           <v-col cols="6" sm="3">

@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  meteodata:
+    build: .
+    container_name: meteodata
+    ports:
+      - "8080:80"
+    restart: unless-stopped
